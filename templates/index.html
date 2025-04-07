@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ текста</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data" id="fileForm">
+        {% csrf_token %}
+        <P>Выберите 1 или несколько файлов</P>
+        <label for="fileInput" class="button">Выбрать файлы</label>
+        <input type="file" id="fileInput" name="files" multiple style="display: none;" accept=".txt,.doc">
+    </form>
+
+    {% if word_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Слово</th>
+                    <th>TF (количество)</th>
+                    <th>IDF</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in word_data %}
+                    <tr>
+                        <td>{{ item.word }}</td>
+                        <td>{{ item.tf }} ({{ item.count }})</td>
+                        <td>{{ item.idf }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                document.getElementById('fileForm').submit();
+            }
+        });
+    </script>
+</body>
+</html>
